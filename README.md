@@ -32,7 +32,7 @@ A modern and interactive weather web application that provides real-time weather
 
 ## 🌐 Live Demo
 
-👉 https://github.com/BhavaniBabu1/aether-weather.git
+👉 https://bhavanibabu1.github.io/aether-weather/
 ---
 
 ## 📂 Project Structure
