@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aether Weather</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="bg-gradient" id="bgGrad"></div>
+  <canvas id="bg-canvas"></canvas>
+
+  <div id="app">
+
+    <!-- HEADER -->
+    <header>
+      <div class="logo">🌤 <span>Aether</span> Weather</div>
+
+      <div class="search-row">
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search city…" autocomplete="off" />
+          <div class="suggestions" id="suggestions"></div>
+        </div>
+        <button class="btn-icon" id="voiceBtn" title="Voice search">🎙</button>
+        <button class="btn-icon" id="locBtn" title="My location">📍</button>
+      </div>
+
+      <div class="header-right">
+        <div class="unit-toggle">
+          <button class="unit-btn active" id="btnC">°C</button>
+          <button class="unit-btn" id="btnF">°F</button>
+        </div>
+        <button class="btn-icon" id="themeBtn" title="Toggle theme">🌙</button>
+      </div>
+    </header>
+
+    <!-- VOICE STATUS -->
+    <div class="voice-status" id="voiceStatus">🎙 Listening… speak a city name</div>
+
+    <!-- RECENT SEARCHES -->
+    <div id="recentWrap" style="margin-bottom:1rem; display:none;">
+      <div class="recent-label">Recent</div>
+      <div class="recent-chips" id="recentChips"></div>
+    </div>
+
+    <!-- ERROR -->
+    <div class="error-box" id="errorBox">⚠️ <span id="errorMsg">City not found.</span></div>
+
+    <!-- LOADING -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+      <div class="loading-text">Fetching weather data…</div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="mainContent" style="display:none;">
+      <div class="main-grid">
+
+        <!-- HERO CARD -->
+        <div class="glass-card weather-hero span-2" id="heroCard">
+          <div class="hero-location">📍 <span id="heroCountry"></span></div>
+          <div class="hero-city" id="heroCity">—</div>
+          <div class="hero-date" id="heroDate"></div>
+          <div class="hero-temp-row">
+            <div>
+              <div class="hero-temp-wrap">
+                <div class="hero-temp" id="heroTemp">—</div>
+                <div class="hero-unit" id="heroUnit">°C</div>
+              </div>
+              <div class="hero-condition" id="heroCondition">—</div>
+            </div>
+            <div class="hero-weather-icon" id="heroIcon">🌤</div>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-label">Humidity</div>
+              <div class="hero-stat-value" id="statHumidity">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Wind</div>
+              <div class="hero-stat-value" id="statWind">—</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-label">Visibility</div>
+              <div class="hero-stat-value" id="statVis">—</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SMART TIP -->
+        <div class="glass-card span-2">
+          <div class="smart-tip">
+            <div class="tip-icon" id="tipIcon">💡</div>
+            <div class="tip-text" id="tipText">—</div>
+          </div>
+        </div>
+
+        <!-- CONDITIONS -->
+        <div class="glass-card">
+          <div class="section-title">Conditions</div>
+          <div class="extra-stats-grid">
+            <div class="extra-stat-card">
+              <div class="extra-stat-label">Feels Like</div>
+              <div class="extra-stat-value" id="exFeels">—</div>
+              <div class="extra-stat-note" id="exFeelsNote">—</div>
+            </div>
+            <div class="extra-stat-card">
+              <div class="extra-stat-label">Pressure</div>
+              <div class="extra-stat-value" id="exPressure">—</div>
+              <div class="extra-stat-note">hPa</div>
+            </div>
+            <div class="extra-stat-card">
+              <div class="extra-stat-label">Sunrise</div>
+              <div class="extra-stat-value esv-sm" id="exSunrise">—</div>
+              <div class="extra-stat-note">local time</div>
+            </div>
+            <div class="extra-stat-card">
+              <div class="extra-stat-label">Sunset</div>
+              <div class="extra-stat-value esv-sm" id="exSunset">—</div>
+              <div class="extra-stat-note">local time</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WIND COMPASS -->
+        <div class="glass-card text-center">
+          <div class="section-title">Wind Direction</div>
+          <div class="wind-compass">
+            <div class="compass-n">N</div>
+            <div class="wind-arrow" id="windArrow"></div>
+            <div class="compass-dot"></div>
+          </div>
+          <div class="wind-speed-val" id="windSpeed2">—</div>
+          <div class="wind-dir-label" id="windDirLabel">—</div>
+        </div>
+
+        <!-- 5-DAY FORECAST -->
+        <div class="glass-card span-3">
+          <div class="section-title">5-Day Forecast</div>
+          <div class="forecast-scroll" id="forecastScroll"></div>
+        </div>
+
+        <!-- HOURLY -->
+        <div class="glass-card span-3">
+          <div class="section-title">Hourly Forecast</div>
+          <div class="hourly-scroll" id="hourlyScroll"></div>
+        </div>
+
+        <!-- TEMP CHART -->
+        <div class="glass-card span-2">
+          <div class="section-title">Temperature Trend (5 Days)</div>
+          <div class="chart-wrap"><canvas id="tempChart"></canvas></div>
+        </div>
+
+        <!-- HUMIDITY CHART -->
+        <div class="glass-card">
+          <div class="section-title">Humidity Trend</div>
+          <div class="chart-wrap"><canvas id="humidChart"></canvas></div>
+        </div>
+
+        <!-- MAP -->
+        <div class="glass-card span-3">
+          <div class="section-title">Location Map</div>
+          <div id="map"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div id="emptyState" class="empty-state">
+      <div class="empty-icon">🌍</div>
+      <div class="empty-title">Discover the weather anywhere</div>
+      <div class="empty-sub">Search a city or tap 📍 for your location</div>
+    </div>
+
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
