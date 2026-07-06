@@ -8,8 +8,8 @@
   --radius-sm: 12px;
   --radius-md: 20px;
   --radius-lg: 28px;
-  --radius-xl: 36px;
-  --glass-bg:     rgba(255,255,255,0.10);
+  --radius-xl: 30px;
+  --glass-bg:     rgba(255,255,0.10);
   --glass-border: rgba(255,255,255,0.18);
   --glass-shadow: 0 8px 32px rgba(0,0,0,0.18);
   --text-primary:   rgba(255,255,255,0.96);
