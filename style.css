@@ -5,8 +5,8 @@
 :root {
   --font-display: 'Syne', sans-serif;
   --font-body:    'DM Sans', sans-serif;
-  --radius-sm: 120px;
-  --radius-md: 200px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
   --radius-lg: 28px;
   --radius-xl: 28px;
   --glass-bg:     rgba(255,255,0.10);
