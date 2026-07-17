@@ -10,7 +10,7 @@ const WEATHER_ICONS = {
   '50d':'🌫','50n':'🌫',
 };
 
-const COMPASS = ['N','NE','E','SE','S','SW','W','NW'];
+const COMPASS = ['N','NE','E','SE','S','SW','N','NW'];
 
 const state = {
   unit: 'metric',
